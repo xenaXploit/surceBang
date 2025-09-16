@@ -1,0 +1,29 @@
+local UIS = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+
+-- ====== Infinite Jump Only ======
+local infJumpEnabled = true -- auto ON
+
+-- Core Infinite Jump
+local function onJumpRequest()
+    if not infJumpEnabled then return end
+    local char = lp.Character
+    if not char then return end
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if hum then
+        hum:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end
+
+-- Boot
+UIS.JumpRequest:Connect(onJumpRequest)
+
+-- Keybind Toggle (J)
+UIS.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.J then
+        infJumpEnabled = not infJumpEnabled
+        print(("Infinite Jump: %s"):format(infJumpEnabled and "ON" or "OFF"))
+    end
+end)
